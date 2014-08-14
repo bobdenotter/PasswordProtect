@@ -29,6 +29,11 @@ class Extension extends \Bolt\BaseExtension
 
     }
 
+    public function getName()
+    {
+        return "Password Protect";
+    }
+
     public function initialize()
     {
 
