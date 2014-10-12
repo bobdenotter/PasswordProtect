@@ -7,28 +7,6 @@ use Bolt\Extensions\Snippets\Location as SnippetLocation;
 
 class Extension extends \Bolt\BaseExtension
 {
-
-    public function info()
-    {
-
-        $data = array(
-            'name' =>"PasswordProtect extension",
-            'description' => "A small extension to password protect pages on your site, ".
-                             "when using <code>{{ passwordprotect() }}</code> in your templates.",
-            'author' => "Bob den Otter",
-            'link' => "http://bolt.cm",
-            'version' => "0.1",
-            'required_bolt_version' => "1.4",
-            'highest_bolt_version' => "1.4",
-            'type' => "Twig function",
-            'first_releasedate' => "2013-12-11",
-            'latest_releasedate' => "2013-12-11",
-        );
-
-        return $data;
-
-    }
-
     public function getName()
     {
         return "Password Protect";
