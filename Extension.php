@@ -1,7 +1,7 @@
 <?php
 // PasswordProtect Extension for Bolt
 
-namespace PasswordProtect;
+namespace Bolt\Extension\Bolt\PasswordProtect;
 
 use Bolt\Extensions\Snippets\Location as SnippetLocation;
 
