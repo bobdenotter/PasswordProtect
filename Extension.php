@@ -3,8 +3,6 @@
 
 namespace Bolt\Extension\Bolt\PasswordProtect;
 
-use Bolt\Extensions\Snippets\Location as SnippetLocation;
-
 class Extension extends \Bolt\BaseExtension
 {
     public function getName()
@@ -14,10 +12,8 @@ class Extension extends \Bolt\BaseExtension
 
     public function initialize()
     {
-
         $this->addTwigFunction('passwordprotect', 'passwordProtect');
         $this->addTwigFunction('passwordform', 'passwordForm');
-
     }
 
     /**
@@ -38,10 +34,7 @@ class Extension extends \Bolt\BaseExtension
             simpleredirect($redirectto->link(). "?returnto=" . urlencode($returnto));
 
         }
-
-
     }
-
 
     /**
      * Show the password form. If the visitor gives the correct password, they
@@ -54,9 +47,8 @@ class Extension extends \Bolt\BaseExtension
 
         // Set up the form.
         $form = $this->app['form.factory']->createBuilder('form', $data)
-            ->add('password', 'password')
-            ->getForm();
-
+                     ->add('password', 'password')
+                     ->getForm();
 
         if ($this->app['request']->getMethod() == 'POST') {
 
@@ -97,6 +89,5 @@ class Extension extends \Bolt\BaseExtension
         return new \Twig_Markup($html, 'UTF-8');
 
     }
-
 
 }
