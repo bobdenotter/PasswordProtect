@@ -1,6 +1,6 @@
 {
     "name": "bolt/passwordprotect",
-    "description": "",
+    "description": "A small extension to password protect pages on your site, when using {{ passwordprotect() }} in your templates.",
     "type": "bolt-extension",
     "keywords": [],
     "require": {
