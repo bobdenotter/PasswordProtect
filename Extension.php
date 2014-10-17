@@ -1,34 +1,10 @@
 <?php
 // PasswordProtect Extension for Bolt
 
-namespace PasswordProtect;
-
-use Bolt\Extensions\Snippets\Location as SnippetLocation;
+namespace Bolt\Extension\Bolt\PasswordProtect;
 
 class Extension extends \Bolt\BaseExtension
 {
-
-    public function info()
-    {
-
-        $data = array(
-            'name' =>"PasswordProtect extension",
-            'description' => "A small extension to password protect pages on your site, ".
-                             "when using <code>{{ passwordprotect() }}</code> in your templates.",
-            'author' => "Bob den Otter",
-            'link' => "http://bolt.cm",
-            'version' => "0.1",
-            'required_bolt_version' => "1.4",
-            'highest_bolt_version' => "1.4",
-            'type' => "Twig function",
-            'first_releasedate' => "2013-12-11",
-            'latest_releasedate' => "2013-12-11",
-        );
-
-        return $data;
-
-    }
-
     public function getName()
     {
         return "Password Protect";
@@ -36,10 +12,8 @@ class Extension extends \Bolt\BaseExtension
 
     public function initialize()
     {
-
         $this->addTwigFunction('passwordprotect', 'passwordProtect');
         $this->addTwigFunction('passwordform', 'passwordForm');
-
     }
 
     /**
@@ -60,10 +34,7 @@ class Extension extends \Bolt\BaseExtension
             simpleredirect($redirectto->link(). "?returnto=" . urlencode($returnto));
 
         }
-
-
     }
-
 
     /**
      * Show the password form. If the visitor gives the correct password, they
@@ -76,9 +47,8 @@ class Extension extends \Bolt\BaseExtension
 
         // Set up the form.
         $form = $this->app['form.factory']->createBuilder('form', $data)
-            ->add('password', 'password')
-            ->getForm();
-
+                     ->add('password', 'password')
+                     ->getForm();
 
         if ($this->app['request']->getMethod() == 'POST') {
 
@@ -119,6 +89,5 @@ class Extension extends \Bolt\BaseExtension
         return new \Twig_Markup($html, 'UTF-8');
 
     }
-
 
 }

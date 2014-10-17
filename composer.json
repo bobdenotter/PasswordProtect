@@ -1,6 +1,6 @@
 {
-    "name": "bolt/PasswordProtect",
-    "description": "",
+    "name": "bolt/passwordprotect",
+    "description": "A small extension to password protect pages on your site, when using {{ passwordprotect() }} in your templates.",
     "type": "bolt-extension",
     "keywords": [],
     "require": {
@@ -18,12 +18,7 @@
             "init.php"
         ],
         "psr-4": {
-            "PasswordProtect\\": ""
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.7.*"
+            "Bolt\\Extension\\Bolt\\PasswordProtect\\": ""
         }
     }
 }
