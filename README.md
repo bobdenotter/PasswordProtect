@@ -18,6 +18,7 @@ See `config.yml` for the options.
 **Note:** This 'protection' should not be considered 'secure'. The password will be sent
 over the internet in plain text, so it can be intercepted if people use it on a
 public WiFi network, or something like that.
+In order to get this extension to work. You need to add allowtwig: true to the field were you want to insert the twigcode.
 
 The 'password' page
 -------------------
