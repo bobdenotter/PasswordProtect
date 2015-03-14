@@ -3,6 +3,8 @@
 
 namespace Bolt\Extension\Bolt\PasswordProtect;
 
+use Bolt\Library as Lib;
+
 class Extension extends \Bolt\BaseExtension
 {
     public function getName()
@@ -31,8 +33,10 @@ class Extension extends \Bolt\BaseExtension
 
             $redirectto = $this->app['storage']->getContent($this->config['redirect'], array('returnsingle' => true));
             $returnto = $this->app['request']->getRequestUri();
-            simpleredirect($redirectto->link(). "?returnto=" . urlencode($returnto));
+            $redirect = Lib::simpleredirect($redirectto->link(). "?returnto=" . urlencode($returnto));
 
+            // Yeah, this isn't very nice, but we _do_ want to shortcircuit the request.
+            die();
         }
     }
 
@@ -68,7 +72,8 @@ class Extension extends \Bolt\BaseExtension
 
                 // And back we go, to the page we originally came from..
                 if (!empty($returnto)) {
-                    simpleredirect($returnto);
+                    Lib::simpleredirect($returnto);
+                    die();
                 }
 
             } else {
@@ -88,6 +93,17 @@ class Extension extends \Bolt\BaseExtension
 
         return new \Twig_Markup($html, 'UTF-8');
 
+    }
+
+    /**
+     * Allow users to place {{ passwordprotect() }} tags into content, if
+     * `allowtwig: true` is set in the contenttype.
+     *
+     * @return boolean
+     */
+    public function isSafe()
+    {
+        return true;
     }
 
 }
