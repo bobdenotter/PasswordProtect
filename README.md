@@ -1,32 +1,35 @@
 PasswordProtect extension
 =========================
 
-The "PasswordProtect extension" is a small extension that allows you to password
-protect one or more of your pages with a password. Use it by simply placing the
-following in your template:
+The "PasswordProtect extension" is a small extension that allows you to
+password protect one or more of your pages with a password. Use it by simply
+placing the following in your template:
 
     {{ passwordprotect() }}
 
-You can put this either in your template, to protect an entire contenttype, or just
-place it in the body text of a record.
+You can put this either in your template, to protect an entire contenttype, or
+just place it in the body text of a record.
 
-People who do not yet have access will automatically be redirected to a
-page, where they will be asked to provide the password.
+People who do not yet have access will automatically be redirected to a page,
+where they will be asked to provide the password.
 
 See `config.yml` for the options.
 
-**Note:** This 'protection' should not be considered 'secure'. The password will be sent
-over the internet in plain text, so it can be intercepted if people use it on a
-public WiFi network, or something like that.
-In order to get this extension to work. You need to add allowtwig: true to the field were you want to insert the twigcode.
+**Note:** This 'protection' should not be considered 'secure'. The password
+will be sent over the internet in plain text, so it can be intercepted if
+people use it on a public WiFi network, or something like that.
+
+In order to get this extension to work. You need to add allowtwig: true to the
+field were you want to insert the twigcode.
 
 The 'password' page
 -------------------
-The page you've set as the `redirect:` option in the `config.yml` can be any Bolt
-page you want. It can be a normal page, where you briefly describe why the user was
-suddenly redirected here. And, perhaps you can give instructions on how to acquire
-the password, if they don't have it. When the user provides the correct password,
-they will automatically be redirected back to the page they came from.
+The page you've set as the `redirect:` option in the `config.yml` can be any
+Bolt page you want. It can be a normal page, where you briefly describe why the
+visitor was suddenly redirected here. And, perhaps you can give instructions on
+how to acquire the password, if they don't have it. When the user provides the
+correct password, they will automatically be redirected back to the page they
+came from.
 
 To insert the actual form with the password field, simply use:
 
@@ -35,6 +38,25 @@ To insert the actual form with the password field, simply use:
 Like above, you can do this either in the template, or simply in the content of
 the page somewhere.
 
-**Tip:** do not be a dumbass and require a login on the page you're redirecting to!
-Your visitors will get stuck in an endless loop, if you do.
+**Tip:** do not be a dumbass and require a login on the page you're redirecting
+to! Your visitors will get stuck in an endless loop, if you do.
 
+After logging on
+----------------
+
+If you're on a page, and you'd like to display to a visitor that they're logged
+on, you can use the following:
+
+```twig
+{% if app.session.get('passwordprotect_name') is not empty %}
+    <p>Hello, {{ app.session.get('passwordprotect_name') }}</p>
+{% endif %}
+```
+
+Generating password hashes
+--------------------------
+
+This extension comes with a small tool, to help you generate proper hashes. To
+generate hashed passwords for your visitors, go to `/bolt/generatepasswords` to
+create password hashes. Note that you must be logged on to the Bolt backend, to
+do so.
