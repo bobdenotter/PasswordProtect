@@ -203,6 +203,11 @@ class Extension extends \Bolt\BaseExtension
 
     }
 
+    /**
+     * Generate a hashed password based upon the users encryption type.
+     * @param $password
+     * @return string
+     */
     protected function passwordGenerator($password)
     {
         switch($this->config['encryption']) {
