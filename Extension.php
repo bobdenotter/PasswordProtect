@@ -54,10 +54,17 @@ class Extension extends \Bolt\BaseExtension
         }
 
     }
+
+    /**
+     * Function to check if session is set, otherwise redirect and login
+     *
+     * @return \Twig_Markup
+     */
+    protected function checkSessionAndRedirect()
+    {
         if ($this->app['session']->get('passwordprotect') == 1) {
             return new \Twig_Markup("<!-- Password protection OK! -->", 'UTF-8');
         } else {
-
             $redirectto = $this->app['storage']->getContent($this->config['redirect'], array('returnsingle' => true));
             $returnto = $this->app['request']->getRequestUri();
             $redirect = Lib::simpleredirect($redirectto->link(). "?returnto=" . urlencode($returnto));
