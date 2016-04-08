@@ -5,6 +5,8 @@ namespace Bolt\Extension\Bolt\PasswordProtect;
 
 use Hautelook\Phpass\PasswordHash;
 use Bolt\Library as Lib;
+use Symfony\Component\Yaml\Dumper;
+use Symfony\Component\Yaml\Parser;
 
 class Extension extends \Bolt\BaseExtension
 {
@@ -224,6 +226,41 @@ class Extension extends \Bolt\BaseExtension
         }
 
         return $password;
+    }
+
+    /**
+     * Handles reading the Bolt Forms yml file.
+     *
+     * @return array The parsed data
+     */
+    protected function read()
+    {
+        $file = $this->app['resources']->getPath('config/extensions/passwordprotect.bolt.yml');
+        $yaml = file_get_contents($file);
+        $parser = new Parser();
+        $data = $parser->parse($yaml);
+        return $data;
+    }
+
+    /**
+     * Internal method that handles writing the data array back to the YML file.
+     *
+     * @param array $data
+     *
+     * @return bool True if successful
+     */
+    protected function write($data)
+    {
+        $dumper = new Dumper();
+        $dumper->setIndentation(2);
+        $yaml = $dumper->dump($data, 9999);
+        $file = $this->app['resources']->getPath('config/extensions/passwordprotect.bolt.yml');
+        try {
+            $response = @file_put_contents($file, $yaml);
+        } catch (\Exception $e) {
+            $response = null;
+        }
+        return $response;
     }
 
 }
