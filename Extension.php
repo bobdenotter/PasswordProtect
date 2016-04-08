@@ -26,6 +26,13 @@ class Extension extends \Bolt\BaseExtension
         $path = $this->app['config']->get('general/branding/path') . '/generatepasswords';
         $this->app->match($path, array($this, "generatepasswords"));
 
+        $extension = $this;
+
+        // Register this extension's actions as an early event.
+        $this->app->before(function (Request $request) use ($extension) {
+            return $extension->checkContentTypeOnRequest($request);
+        }, SilexApplication::EARLY_EVENT);
+
     }
 
     /**
