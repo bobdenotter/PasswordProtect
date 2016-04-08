@@ -60,3 +60,10 @@ This extension comes with a small tool, to help you generate proper hashes. To
 generate hashed passwords for your visitors, go to `/bolt/generatepasswords` to
 create password hashes. Note that you must be logged on to the Bolt backend, to
 do so.
+
+Changing passwords without modifying the YML file
+-------------------------------------------------
+
+Passwords can be edited without modifying the YML file by going to the `Extras` menu. 
+There should be a link called `Edit Password`. It will edit the password and show you 
+the existing password if it is stored in plaintext.
