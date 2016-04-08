@@ -29,9 +29,11 @@ class Extension extends \Bolt\BaseExtension
         $extension = $this;
 
         // Register this extension's actions as an early event.
-        $this->app->before(function (Request $request) use ($extension) {
-            return $extension->checkContentTypeOnRequest($request);
-        }, SilexApplication::EARLY_EVENT);
+        if (isset($this->config['contentType'])) {
+            $this->app->before(function (Request $request) use ($extension) {
+                return $extension->checkContentTypeOnRequest($request);
+            }, SilexApplication::EARLY_EVENT);
+        }
 
     }
 
