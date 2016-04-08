@@ -36,14 +36,24 @@ class Extension extends \Bolt\BaseExtension
     }
 
     /**
-     * Check if we're currently allowed to view the page. If not, redirect to
-     * the password page.
+     * Check the content type of the request to see if it is password protected.
      *
-     * @return \Twig_Markup
+     * @param Request $request
      */
-    public function passwordProtect()
+    public function checkContentTypeOnRequest(Request $request)
     {
+        #get the path, typically /members-only/home
+        $path = explode("/", $request->getPathInfo());
 
+        //Grab key 1 that has members-only
+        if (isset($path[1])) {
+            //Check if members-only is the same contentType in our config file
+            if ($path[1] === $this->config['contentType']) {
+                $this->checkSessionAndRedirect();
+            }
+        }
+
+    }
         if ($this->app['session']->get('passwordprotect') == 1) {
             return new \Twig_Markup("<!-- Password protection OK! -->", 'UTF-8');
         } else {
