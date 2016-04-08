@@ -75,6 +75,17 @@ class Extension extends \Bolt\BaseExtension
     }
 
     /**
+     * Check if we're currently allowed to view the page. If not, redirect to
+     * the password page.
+     *
+     * @return \Twig_Markup
+     */
+    public function passwordProtect()
+    {
+        $this->checkSessionAndRedirect();
+    }
+
+    /**
      * Show the password form. If the visitor gives the correct password, they
      * are redirected to the page they came from, if any.
      *
