@@ -60,3 +60,9 @@ This extension comes with a small tool, to help you generate proper hashes. To
 generate hashed passwords for your visitors, go to `/bolt/generatepasswords` to
 create password hashes. Note that you must be logged on to the Bolt backend, to
 do so.
+
+Restricting Access to Content Types
+-----------------------------------
+
+You can restrict access to content types by editing the `config.yml` and adding 
+the content types name next to `contentType`.  
