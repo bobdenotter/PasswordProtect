@@ -28,8 +28,8 @@ class Extension extends \Bolt\BaseExtension
         $path = $this->app['config']->get('general/branding/path') . '/generatepasswords';
         $this->app->match($path, array($this, "generatepasswords"));
 
-        $path = $this->app['config']->get('general/branding/path') . '/changepassword';
-        $this->app->match($path, array($this, "changepassword"));
+        $path = $this->app['config']->get('general/branding/path') . '/changePassword';
+        $this->app->match($path, array($this, "changePassword"));
 
     }
 
@@ -200,6 +200,64 @@ class Extension extends \Bolt\BaseExtension
         // Render the form, and show it it the visitor.
         $this->app['twig.loader.filesystem']->addPath(__DIR__);
         $html = $this->app['twig']->render('assets/passwordgenerate.twig', array('form' => $form->createView(), 'password' => $password));
+
+        return new \Twig_Markup($html, 'UTF-8');
+
+    }
+
+    /**
+     * Displays a page that allows the user to change the password without editing the YML files.
+     *
+     * @return \Twig_Markup
+     */
+    public function changePassword()
+    {
+
+        if (!$this->app['users']->isAllowed('dashboard')) {
+            die('You do not have the right privileges to view this page.');
+        }
+
+        // Set up the form.
+        $form = $this->app['form.factory']->createBuilder('form');
+        $form->add('password', 'password');
+        $form = $form->getForm();
+
+        $configData = $this->read();
+
+        $oldPassword = false;
+
+        if (isset($configData['password']) && $this->config['encryption'] === 'plaintext') {
+            $oldPassword = $configData['password'];
+        }
+
+        $password = false;
+
+        if ($this->app['request']->getMethod() == 'POST') {
+            $form->bind($this->app['request']);
+            $data = $form->getData();
+            if ($form->isValid()) {
+
+                if (isset($configData['password'])) {
+                    $plainPassword = $data['password'];
+                    $oldPassword = $plainPassword;
+                    $hashedPassword = $this->passwordGenerator($plainPassword);
+                    $configData['password'] = $hashedPassword;
+                    $this->write($configData);
+                }
+
+            }
+        }
+
+        // Render the form, and show it it the visitor.
+        $this->app['twig.loader.filesystem']->addPath(__DIR__);
+        $html = $this->app['twig']->render(
+            'assets/changepassword.twig',
+            array(
+                'form' => $form->createView(),
+                'password' => $plainPassword,
+                'oldPassword' => $oldPassword
+            )
+        );
 
         return new \Twig_Markup($html, 'UTF-8');
 
