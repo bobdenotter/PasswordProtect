@@ -26,6 +26,9 @@ class Extension extends \Bolt\BaseExtension
         $path = $this->app['config']->get('general/branding/path') . '/generatepasswords';
         $this->app->match($path, array($this, "generatepasswords"));
 
+        $path = $this->app['config']->get('general/branding/path') . '/changepassword';
+        $this->app->match($path, array($this, "changepassword"));
+
     }
 
     /**
