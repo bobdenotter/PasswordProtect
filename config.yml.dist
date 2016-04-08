@@ -27,3 +27,6 @@ message_wrong: "The password was not correct. Try again."
 
 # Don't change this, unless you like living on the edge.
 form: assets/form.twig
+
+#Content type to restrict users on
+contentType: members-only-post
