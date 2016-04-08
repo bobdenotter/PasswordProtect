@@ -203,4 +203,22 @@ class Extension extends \Bolt\BaseExtension
 
     }
 
+    protected function passwordGenerator($password)
+    {
+        switch($this->config['encryption']) {
+            case 'plaintext':
+                $password = $password;
+                break;
+            case 'md5':
+                $password = md5($password);
+                break;
+            case 'password_hash':
+                $hasher = new PasswordHash(12, true);
+                $password = $hasher->HashPassword($password);
+                break;
+        }
+
+        return $password;
+    }
+
 }
