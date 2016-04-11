@@ -107,7 +107,7 @@ class Extension extends \Bolt\BaseExtension
 
         }
 
-        if (! empty($this->config['form'])) {
+        if (!empty($this->config['form'])) {
             $formView = $this->config['form'];
         } else {
             $formView = 'assets/passwordform.twig';
