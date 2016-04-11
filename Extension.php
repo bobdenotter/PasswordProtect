@@ -44,13 +44,21 @@ class Extension extends \Bolt\BaseExtension
      */
     public function checkContentTypeOnRequest(Request $request)
     {
-        #get the path, typically /members-only/home
-        $path = explode("/", $request->getPathInfo());
+        //get the path, typically /members-only/home
+        $path = $request->get('contenttypeslug');
 
         //Grab key 1 that has members-only
-        if (isset($path[1])) {
-            //Check if members-only is the same contentType in our config file
-            if ($path[1] === $this->config['contentType']) {
+        if ($path !== null) {
+
+            //If value isn't array, then make it an array
+            if (!is_array($this->config['contenttype'])) {
+                $contenttype = [$this->config['contenttype']];
+            } else {
+                $contenttype = [$this->config['contenttype']];
+            }
+
+            //Check if members-only is the same contenttype in our config file
+            if (in_array($path, $contenttype)) {
                 $this->checkSessionAndRedirect();
             }
         }
