@@ -32,7 +32,7 @@ class Extension extends \Bolt\BaseExtension
         if (isset($this->config['contentType'])) {
             $this->app->before(function (Request $request) use ($extension) {
                 return $extension->checkContentTypeOnRequest($request);
-            }, SilexApplication::EARLY_EVENT);
+            }, SilexApplication::LATE_EVENT);
         }
 
     }
