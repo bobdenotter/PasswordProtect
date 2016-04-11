@@ -29,4 +29,4 @@ message_wrong: "The password was not correct. Try again."
 form: assets/form.twig
 
 #Content type to restrict users on
-contentType: members-only-post
+contenttype: [members-only-post, event]
