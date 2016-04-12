@@ -26,6 +26,62 @@ class Extension extends \Bolt\BaseExtension
         $path = $this->app['config']->get('general/branding/path') . '/generatepasswords';
         $this->app->match($path, array($this, "generatepasswords"));
 
+        $extension = $this;
+
+        // Register this extension's actions as an early event.
+        if (isset($this->config['contenttype'])) {
+            $this->app->before(function (Request $request) use ($extension) {
+                return $extension->checkContentTypeOnRequest($request);
+            }, SilexApplication::LATE_EVENT);
+        }
+
+    }
+
+    /**
+     * Check the content type of the request to see if it is password protected.
+     *
+     * @param Request $request
+     */
+    public function checkContentTypeOnRequest(Request $request)
+    {
+        //get the path, typically /members-only/home
+        $path = $request->get('contenttypeslug');
+
+        //Grab key 1 that has members-only
+        if ($path !== null) {
+
+            //If value isn't array, then make it an array
+            if (!is_array($this->config['contenttype'])) {
+                $contenttype = [$this->config['contenttype']];
+            } else {
+                $contenttype = [$this->config['contenttype']];
+            }
+
+            //Check if members-only is the same contenttype in our config file
+            if (in_array($path, $contenttype)) {
+                $this->checkSessionAndRedirect();
+            }
+        }
+
+    }
+
+    /**
+     * Function to check if session is set, otherwise redirect and login
+     *
+     * @return \Twig_Markup
+     */
+    protected function checkSessionAndRedirect()
+    {
+        if ($this->app['session']->get('passwordprotect') == 1) {
+            return new \Twig_Markup("<!-- Password protection OK! -->", 'UTF-8');
+        } else {
+            $redirectto = $this->app['storage']->getContent($this->config['redirect'], array('returnsingle' => true));
+            $returnto = $this->app['request']->getRequestUri();
+            $redirect = Lib::simpleredirect($redirectto->link(). "?returnto=" . urlencode($returnto));
+
+            // Yeah, this isn't very nice, but we _do_ want to shortcircuit the request.
+            die();
+        }
     }
 
     /**
@@ -36,18 +92,7 @@ class Extension extends \Bolt\BaseExtension
      */
     public function passwordProtect()
     {
-
-        if ($this->app['session']->get('passwordprotect') == 1) {
-            return new \Twig_Markup("<!-- Password protection OK! -->", 'UTF-8');
-        } else {
-
-            $redirectto = $this->app['storage']->getContent($this->config['redirect'], array('returnsingle' => true));
-            $returnto = $this->app['request']->getRequestUri();
-            $redirect = Lib::simpleredirect($redirectto->link(). "?returnto=" . urlencode($returnto));
-
-            // Yeah, this isn't very nice, but we _do_ want to shortcircuit the request.
-            die();
-        }
+        $this->checkSessionAndRedirect();
     }
 
     /**
