@@ -70,6 +70,12 @@ the content types name next to `contentType`.
 Modifying the public Form page
 -----------------------------------
 
-You can change the form being asked for in the `config.yml` by changing the `form`
-parameter. An example of the form is under `assets/password.twig`.
+You can change the form being asked for in the `config.yml` by changing the
+`form` parameter. An example of the form is under `assets/password.twig`.
 
+Changing passwords without modifying the YML file
+-------------------------------------------------
+
+Passwords can be edited without modifying the YML file by going to the `Extras`
+menu. There should be a link called `Edit Password`. It will edit the password
+and show you the existing password if it is stored in plaintext.
