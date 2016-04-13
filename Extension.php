@@ -148,9 +148,15 @@ class Extension extends \Bolt\BaseExtension
 
         }
 
+        if (!empty($this->config['form'])) {
+            $formView = $this->config['form'];
+        } else {
+            $formView = 'assets/passwordform.twig';
+        }
+
         // Render the form, and show it it the visitor.
         $this->app['twig.loader.filesystem']->addPath(__DIR__);
-        $html = $this->app['twig']->render('assets/passwordform.twig', array('form' => $form->createView()));
+        $html = $this->app['twig']->render($formView, array('form' => $form->createView()));
 
         return new \Twig_Markup($html, 'UTF-8');
 

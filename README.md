@@ -64,5 +64,12 @@ do so.
 Restricting Access to Content Types
 -----------------------------------
 
-You can restrict access to content types by editing the `config.yml` and adding 
-the content types name next to `contentType`.  
+You can restrict access to content types by editing the `config.yml` and adding
+the content types name next to `contentType`.
+
+Modifying the public Form page
+-----------------------------------
+
+You can change the form being asked for in the `config.yml` by changing the `form`
+parameter. An example of the form is under `assets/password.twig`.
+
