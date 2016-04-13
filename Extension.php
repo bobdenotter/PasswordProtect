@@ -3,8 +3,10 @@
 
 namespace Bolt\Extension\Bolt\PasswordProtect;
 
-use Hautelook\Phpass\PasswordHash;
 use Bolt\Library as Lib;
+use Hautelook\Phpass\PasswordHash;
+use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
 
 class Extension extends \Bolt\BaseExtension
 {
@@ -32,7 +34,7 @@ class Extension extends \Bolt\BaseExtension
         if (isset($this->config['contenttype'])) {
             $this->app->before(function (Request $request) use ($extension) {
                 return $extension->checkContentTypeOnRequest($request);
-            }, SilexApplication::LATE_EVENT);
+            }, Application::LATE_EVENT);
         }
 
     }
@@ -49,13 +51,7 @@ class Extension extends \Bolt\BaseExtension
 
         //Grab key 1 that has members-only
         if ($path !== null) {
-
-            //If value isn't array, then make it an array
-            if (!is_array($this->config['contenttype'])) {
-                $contenttype = [$this->config['contenttype']];
-            } else {
-                $contenttype = [$this->config['contenttype']];
-            }
+            $contenttype = (array) $this->config['contenttype'];
 
             //Check if members-only is the same contenttype in our config file
             if (in_array($path, $contenttype)) {
