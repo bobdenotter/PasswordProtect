@@ -6,6 +6,7 @@ use Bolt\Twig\Handler\UtilsHandler;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Bolt\Storage;
 use Twig_Markup;
 
@@ -69,7 +70,8 @@ class Checker
         } else {
             $redirectto = $this->app['storage']->getContent($this->config['redirect'], ['returnsingle' => true]);
             $returnto = $this->app['request_stack']->getCurrentRequest()->getRequestUri();
-            (new UtilsHandler($this->app))->redirect($redirectto->link(). "?returnto=" . urlencode($returnto));
+            $response = new RedirectResponse($redirectto->link(). "?returnto=" . urlencode($returnto));
+            $response->send();
             die();
         }
     }
