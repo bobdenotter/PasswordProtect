@@ -2,9 +2,12 @@
     "name": "bolt/passwordprotect",
     "description": "A small extension to password protect pages on your site, when using {{ passwordprotect() }} in your templates.",
     "type": "bolt-extension",
-    "keywords": [],
+    "keywords": [
+        "password",
+        "protect"
+    ],
     "require": {
-        "bolt/bolt": ">=2.1.0,<3.0.0"
+        "bolt/bolt": "^3.0"
     },
     "license": "MIT",
     "authors": [
@@ -13,12 +16,14 @@
             "email": "bob@twokings.nl"
         }
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
-        "files": [
-            "init.php"
-        ],
         "psr-4": {
-            "Bolt\\Extension\\Bolt\\PasswordProtect\\": ""
+            "Bolt\\Extension\\Bolt\\PasswordProtect\\": "src/"
         }
+    },
+    "extra": {
+        "bolt-class": "Bolt\\Extension\\Bolt\\PasswordProtect\\PasswordProtectExtension"
     }
 }
