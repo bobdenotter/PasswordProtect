@@ -57,7 +57,7 @@ Generating password hashes
 --------------------------
 
 This extension comes with a small tool, to help you generate proper hashes. To
-generate hashed passwords for your visitors, go to `/bolt/generatepasswords` to
+generate hashed passwords for your visitors, go to `/bolt/protect/generatepasswords` to
 create password hashes. Note that you must be logged on to the Bolt backend, to
 do so.
 
