@@ -26,9 +26,11 @@ class ProtectController implements ControllerProviderInterface
     {
         $controller = $app['controllers_factory'];
 
-        $controller->match('/generatepasswords', [$this, 'generatepasswords']);
+        if ($app['users']->isAllowed('dashboard')) {
+            $controller->match('/generatepasswords', [$this, 'generatepasswords']);
 
-        $controller->match('/changePassword', [$this, 'changePassword']);
+            $controller->match('/changePassword', [$this, 'changePassword']);
+        }
 
         return $controller;
 
