@@ -69,7 +69,8 @@ class Checker
         } else {
             $redirectto = $this->app['storage']->getContent($this->config['redirect'], ['returnsingle' => true]);
             $returnto = $this->app['request_stack']->getCurrentRequest()->getRequestUri();
-            return (new UtilsHandler($this->app))->redirect($redirectto->link(). "?returnto=" . urlencode($returnto));
+            (new UtilsHandler($this->app))->redirect($redirectto->link(). "?returnto=" . urlencode($returnto));
+            die();
         }
     }
 
