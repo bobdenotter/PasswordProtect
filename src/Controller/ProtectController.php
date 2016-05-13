@@ -4,6 +4,10 @@ namespace Bolt\Extension\Bolt\PasswordProtect\Controller;
 
 use Silex\Application;
 use Silex\ControllerProviderInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Parser;
 
@@ -26,14 +30,26 @@ class ProtectController implements ControllerProviderInterface
     {
         $controller = $app['controllers_factory'];
 
-        if ($app['users']->isAllowed('dashboard')) {
-            $controller->match('/generatepasswords', [$this, 'generatepasswords']);
+        $controller->match('/generatepasswords', [$this, 'generatepasswords']);
 
-            $controller->match('/changePassword', [$this, 'changePassword']);
-        }
+        $controller->match('/changePassword', [$this, 'changePassword']);
+
+        //This must be ran, current user is not set at this time.
+        $controller->before([$this, 'before']);
 
         return $controller;
 
+    }
+
+    public function before(Request $request, Application $app)
+    {
+        if (!$app['users']->isAllowed('dashboard')) {
+            /** @var UrlGeneratorInterface $generator */
+            $generator = $app['url_generator'];
+            return new RedirectResponse($generator->generate('dashboard'), Response::HTTP_SEE_OTHER);
+        }
+
+        return null;
     }
 
     public function generatepasswords()
