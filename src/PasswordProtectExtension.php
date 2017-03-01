@@ -67,19 +67,24 @@ class PasswordProtectExtension extends SimpleExtension
     protected function getDefaultConfig()
     {
         return [
-            'encryption' => 'plaintext'
+            'encryption' => 'plaintext',
+            'permission' => 'files:config'
         ];
     }
 
     protected function registerMenuEntries()
     {
+        $config = $this->getConfig();
+
         $changePassword = (new MenuEntry('passwordProtect', '/bolt/protect/changePassword'))
             ->setLabel('PasswordProtect - Set Password')
-            ->setIcon('fa:lock');
+            ->setIcon('fa:lock')
+            ->setPermission($config['permission']);
 
         $findPasswordHash = (new MenuEntry('generatePasswordHash', '/bolt/protect/generatepasswords'))
             ->setLabel('Generate Password')
-            ->setIcon('fa:lock');
+            ->setIcon('fa:lock')
+            ->setPermission($config['permission']);
 
         return [
             $changePassword,

@@ -92,13 +92,12 @@ class ProtectController implements ControllerProviderInterface
 
         $configData = $this->read();
 
+        $plainPassword = false;
         $oldPassword = false;
 
         if (isset($configData['password']) && $this->config['encryption'] === 'plaintext') {
             $oldPassword = $configData['password'];
         }
-
-        $password = false;
 
         if ($this->app['request']->getMethod() == 'POST') {
             $form->bind($this->app['request']);
@@ -145,8 +144,8 @@ class ProtectController implements ControllerProviderInterface
                 $password = md5($password);
                 break;
             case 'password_hash':
-                $hasher = new PasswordHash(12, true);
-                $password = $hasher->HashPassword($password);
+                $hasher   = new PasswordLib();
+                $password = $hasher->createPasswordHash($password, '$2y$');
                 break;
         }
 
