@@ -2,6 +2,7 @@
 
 namespace Bolt\Extension\Bolt\PasswordProtect\Controller;
 
+use PasswordLib\PasswordLib;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -85,7 +86,13 @@ class ProtectController implements ControllerProviderInterface
         }
 
         // Render the form, and show it it the visitor.
-        $html = $this->app['twig']->render('passwordgenerate.twig', array('form' => $form->createView(), 'password' => $password));
+        $context = [
+            'form' => $form->createView(),
+            'password' => $password,
+            'input' => isset($data['password']) ? $data['password'] : ''
+        ];
+
+        $html = $this->app['twig']->render('passwordgenerate.twig', $context);
 
         return new \Twig_Markup($html, 'UTF-8');
     }
@@ -127,15 +134,14 @@ class ProtectController implements ControllerProviderInterface
             }
         }
 
+        $context = [
+            'form' => $form->createView(),
+            'password' => $plainPassword,
+            'oldPassword' => $oldPassword
+        ];
+
         // Render the form, and show it it the visitor.
-        $html = $this->app['twig']->render(
-            'changepassword.twig',
-            array(
-                'form' => $form->createView(),
-                'password' => $plainPassword,
-                'oldPassword' => $oldPassword
-            )
-        );
+        $html = $this->app['twig']->render('changepassword.twig', $context);
 
         return new \Twig_Markup($html, 'UTF-8');
 

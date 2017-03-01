@@ -104,7 +104,7 @@ class Checker
 
         // If we only use the password, the 'users' array is just one element.
         if ($this->config['password_only']) {
-            $visitors = array('visitor' => $this->config['password']);
+            $visitors = ['visitor' => $this->config['password']];
             $data['username'] = 'visitor';
         } else {
             $visitors = $this->config['visitors'];
