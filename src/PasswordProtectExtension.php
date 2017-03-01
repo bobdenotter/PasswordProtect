@@ -14,7 +14,6 @@ class PasswordProtectExtension extends SimpleExtension
 {
     public function registerServices(Application $app)
     {
-
         $app['passwordprotect.handler.checker'] = $app->share(
             function ($app) {
                 $config = $app['extensions']->get('Bolt/PasswordProtect')->getConfig();
@@ -27,7 +26,7 @@ class PasswordProtectExtension extends SimpleExtension
             function ($app) {
                 $config = $app['extensions']->get('Bolt/PasswordProtect')->getConfig();
 
-                return new \Bolt\Extension\Bolt\PasswordProtect\Twig\PasswordProtectExtension(
+                return new Twig\PasswordProtectExtension(
                     $app,
                     $config
                 );

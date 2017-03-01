@@ -7,7 +7,6 @@ use Silex\Application;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Twig_Loader_Filesystem;
 use Twig_Environment;
@@ -15,7 +14,6 @@ use Twig_Markup;
 
 class PasswordProtectExtension
 {
-
     /** @var FormFactoryInterface $form */
     protected $form;
 
@@ -40,10 +38,14 @@ class PasswordProtectExtension
     /** @var Application $app */
     protected $app;
 
-    public function __construct(
-        Application $app,
-        array $config
-    ) {
+    /**
+     * PasswordProtectExtension constructor.
+     *
+     * @param Application $app
+     * @param array $config
+     */
+    public function __construct(Application $app, array $config)
+    {
         $this->config = $config;
         $this->app = $app;
     }
@@ -56,7 +58,6 @@ class PasswordProtectExtension
      */
     public function passwordForm()
     {
-
         // Set up the form.
         $form = $this->app['form.factory']->createBuilder('form');
 
@@ -101,7 +102,6 @@ class PasswordProtectExtension
                 }
 
             }
-
         }
 
         if (!empty($this->config['form'])) {
@@ -115,7 +115,6 @@ class PasswordProtectExtension
         $html = $this->app['twig']->render($formView, array('form' => $form->createView()));
 
         return new Twig_Markup($html, 'UTF-8');
-
     }
 
     public function passwordProtect()

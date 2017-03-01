@@ -2,7 +2,6 @@
 
 namespace Bolt\Extension\Bolt\PasswordProtect\Handler;
 
-use Bolt\Twig\Handler\UtilsHandler;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -28,10 +27,14 @@ class Checker
     /** @var Application $app */
     protected $app;
 
-    public function __construct(
-        Application $app,
-        array $config
-    ) {
+    /**
+     * Checker constructor.
+     *
+     * @param Application $app
+     * @param array $config
+     */
+    public function __construct(Application $app, array $config)
+    {
         $this->app = $app;
         $this->config = $config;
     }
@@ -122,6 +125,5 @@ class Checker
 
         // If we get here, no dice.
         return false;
-
     }
 }

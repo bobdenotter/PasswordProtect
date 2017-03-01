@@ -6,13 +6,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ContentTypeListener
 {
-
     /** @var array $config */
     protected $config;
 
     /** @var Request $request */
     protected $request;
 
+    /**
+     * ContentTypeListener constructor.
+     *
+     * @param array $config
+     * @param Request $request
+     */
     public function __construct(array $config, Request $request)
     {
         $this->config = $config;

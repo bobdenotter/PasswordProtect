@@ -13,34 +13,46 @@ use Symfony\Component\Yaml\Parser;
 
 class ProtectController implements ControllerProviderInterface
 {
-
     /** @var Application $app */
     protected $app;
 
     /** @var array $config */
     protected $config;
 
+    /**
+     * ProtectController constructor.
+     *
+     * @param Application $app
+     * @param array $config
+     */
     public function __construct(Application $app, array $config)
     {
         $this->app = $app;
         $this->config = $config;
     }
 
+    /**
+     * @param Application $app
+     * @return mixed
+     */
     public function connect(Application $app)
     {
         $controller = $app['controllers_factory'];
 
         $controller->match('/generatepasswords', [$this, 'generatepasswords']);
-
         $controller->match('/changePassword', [$this, 'changePassword']);
 
         //This must be ran, current user is not set at this time.
         $controller->before([$this, 'before']);
 
         return $controller;
-
     }
 
+    /**
+     * @param Request $request
+     * @param Application $app
+     * @return null|RedirectResponse
+     */
     public function before(Request $request, Application $app)
     {
         if (!$app['users']->isAllowed('dashboard')) {
@@ -52,9 +64,11 @@ class ProtectController implements ControllerProviderInterface
         return null;
     }
 
+    /**
+     * @return \Twig_Markup
+     */
     public function generatepasswords()
     {
-
         // Set up the form.
         $form = $this->app['form.factory']->createBuilder('form');
         $form->add('password', 'text');
@@ -74,7 +88,6 @@ class ProtectController implements ControllerProviderInterface
         $html = $this->app['twig']->render('passwordgenerate.twig', array('form' => $form->createView(), 'password' => $password));
 
         return new \Twig_Markup($html, 'UTF-8');
-
     }
 
     /**
@@ -84,7 +97,6 @@ class ProtectController implements ControllerProviderInterface
      */
     public function changePassword()
     {
-
         // Set up the form.
         $form = $this->app['form.factory']->createBuilder('form');
         $form->add('password', 'password');
