@@ -51,8 +51,10 @@ class PasswordProtectExtension extends SimpleExtension
     {
         $app = $this->getContainer();
 
-        $app['twig.sandbox.policy']->setAllowedTags(['form_widget']);
-        // $app['twig.sandbox.policy']->addAllowedProperty('session');
+        $app['twig.sandbox.policy']->addAllowedFunction('form_widget');
+        $app['twig.sandbox.policy']->addAllowedProperty('app', 'session');
+        $app['twig.sandbox.policy']->addAllowedMethod('session', 'get');
+        $app['twig.sandbox.policy']->addAllowedProperty('formview', 'vars');
 
         return [
             'passwordprotect' => [
@@ -64,8 +66,6 @@ class PasswordProtectExtension extends SimpleExtension
                 ['is_safe' => ['html'], 'safe' => true]
             ]
         ];
-
-
     }
 
     protected function getDefaultConfig()
