@@ -34,18 +34,16 @@ class PasswordProtectExtension extends SimpleExtension
         );
 
         $app['twig.sandbox.policy'] = $app->share(
-            $app->extend('twig.sandbox.policy',
-                function ($policy) {
-                    $policy->addAllowedFunction('form_widget');
-                    $policy->addAllowedMethod('formview', 'isrendered');
-                    $policy->addAllowedMethod('session', 'get');
-                    $policy->addAllowedProperty('app', 'session');
-                    $policy->addAllowedProperty('formview', 'parent');
-                    $policy->addAllowedProperty('formview', 'vars');
+            $app->extend('twig.sandbox.policy', function ($policy) {
+                $policy->addAllowedFunction('form_widget');
+                $policy->addAllowedMethod('formview', 'isrendered');
+                $policy->addAllowedMethod('session', 'get');
+                $policy->addAllowedProperty('app', 'session');
+                $policy->addAllowedProperty('formview', 'parent');
+                $policy->addAllowedProperty('formview', 'vars');
 
-                    return $policy;
-                }
-            )
+                return $policy;
+            })
         );
 
         $config = $this->getConfig();
