@@ -33,6 +33,21 @@ class PasswordProtectExtension extends SimpleExtension
             }
         );
 
+        $app['twig.sandbox.policy'] = $app->share(
+            $app->extend('twig.sandbox.policy',
+                function ($policy) {
+                    $policy->addAllowedFunction('form_widget');
+                    $policy->addAllowedMethod('formview', 'isrendered');
+                    $policy->addAllowedMethod('session', 'get');
+                    $policy->addAllowedProperty('app', 'session');
+                    $policy->addAllowedProperty('formview', 'parent');
+                    $policy->addAllowedProperty('formview', 'vars');
+
+                    return $policy;
+                }
+            )
+        );
+
         $config = $this->getConfig();
 
         if (isset($config['contenttype'])) {
@@ -50,11 +65,6 @@ class PasswordProtectExtension extends SimpleExtension
     protected function registerTwigFunctions()
     {
         $app = $this->getContainer();
-
-        $app['twig.sandbox.policy']->addAllowedFunction('form_widget');
-        $app['twig.sandbox.policy']->addAllowedProperty('app', 'session');
-        $app['twig.sandbox.policy']->addAllowedMethod('session', 'get');
-        $app['twig.sandbox.policy']->addAllowedProperty('formview', 'vars');
 
         return [
             'passwordprotect' => [
