@@ -79,7 +79,7 @@ class PasswordProtectExtension extends SimpleExtension
     protected function getDefaultConfig()
     {
         return [
-            'encryption' => 'plaintext',
+            'encryption' => 'password_hash',
             'permission' => 'files:config'
         ];
     }

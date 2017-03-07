@@ -113,11 +113,7 @@ class Checker
         foreach ($visitors as $visitor => $password) {
             if ($data['username'] === $visitor) {
                 // echo "user match!";
-                if (($this->config['encryption'] == 'md5') && (md5($data['password']) === $password)) {
-                    return $visitor;
-                } elseif (($this->config['encryption'] == 'password_hash') && password_verify($data['password'], $password)) {
-                    return $visitor;
-                } elseif (($this->config['encryption'] == 'plaintext') && ($data['password'] === $password))  {
+                if (password_verify($data['password'], $password)) {
                     return $visitor;
                 }
             }

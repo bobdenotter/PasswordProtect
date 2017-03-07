@@ -58,6 +58,13 @@ class PasswordProtectExtension
      */
     public function passwordForm()
     {
+        // If the config still specifies either 'plain text' or 'md5', tell the user to update,
+        // since only password_hash is supported now.
+        if ($this->config['encryption'] !== 'password_hash') {
+            $message = '<strong>Passwordprotect notice: This extension only supports hashing with the \'password_hash\' mechanism. Please update your configuration file.</strong>';
+            return new \Twig_Markup($message, 'UTF-8');
+        }
+
         // Set up the form.
         $form = $this->app['form.factory']->createBuilder('form');
 

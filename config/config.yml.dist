@@ -5,15 +5,6 @@ password_only: false
 # Change the password to something else.
 password: '$2y$10$E1MSyq3vg.urUr1VI2S1q.yyVpV1qDKJfimajPcbsPFjI3O7fYrce' # password is "hunter42"
 
-# Set the encryption to use for the passwords. Options are:
-#  - plaintext: No encryption is used, passwords are plain text. Not very good.
-#  - md5: basic one-way hashing. Not very good, but better than plaintext.
-#  - password_hash: Good, proper one-way hashing. This is the preferred option.
-# To generate hashed passwords for your visitors, go to
-# `/bolt/generatepasswords` to create password hashes. Note that you must be
-# logged on to the Bolt backend, to do so.
-encryption: password_hash
-
 visitors:
   bob: '$2y$10$E1MSyq3vg.urUr1VI2S1q.yyVpV1qDKJfimajPcbsPFjI3O7fYrce' # password is "hunter42"
   mom: '$2y$10$E1MSyq3vg.urUr1VI2S1q.yyVpV1qDKJfimajPcbsPFjI3O7fYrce' # password is "hunter42"
