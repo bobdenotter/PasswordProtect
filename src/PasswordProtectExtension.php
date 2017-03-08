@@ -24,7 +24,7 @@ class PasswordProtectExtension extends SimpleExtension
 
         $app['passwordprotect.twig'] = $app->share(
             function ($app) use ($config) {
-                return new Twig\PasswordProtectExtension($app, $config);
+                return new Twig\PasswordProtect($app, $config);
             }
         );
 

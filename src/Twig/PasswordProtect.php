@@ -12,7 +12,7 @@ use Twig_Loader_Filesystem;
 use Twig_Environment;
 use Twig_Markup;
 
-class PasswordProtectExtension
+class PasswordProtect
 {
     /** @var FormFactoryInterface $form */
     protected $form;
