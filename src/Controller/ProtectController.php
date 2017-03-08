@@ -41,7 +41,10 @@ class ProtectController implements ControllerProviderInterface
         $controller = $app['controllers_factory'];
 
         $controller->match('/generatepasswords', [$this, 'generatepasswords']);
-        $controller->match('/changePassword', [$this, 'changePassword']);
+
+        if ($this->config['allow_setting_password_in_backend']) {
+            $controller->match('/changePassword', [$this, 'changePassword']);
+        }
 
         //This must be ran, current user is not set at this time.
         $controller->before([$this, 'before']);
@@ -81,7 +84,7 @@ class ProtectController implements ControllerProviderInterface
             $form->bind($this->app['request']);
             $data = $form->getData();
             if ($form->isValid()) {
-                $password = password_hash($data['password'], PASSWORD_BCRYPT);
+                $password = $this->generatePassword($data['password']);
             }
         }
 
@@ -111,23 +114,13 @@ class ProtectController implements ControllerProviderInterface
 
         $configData = $this->read();
 
-        $plainPassword = false;
-        $oldPassword = false;
-
-        if (isset($configData['password']) && $this->config['encryption'] === 'plaintext') {
-            $oldPassword = $configData['password'];
-        }
-
         if ($this->app['request']->getMethod() == 'POST') {
             $form->bind($this->app['request']);
             $data = $form->getData();
             if ($form->isValid()) {
 
                 if (isset($configData['password'])) {
-                    $plainPassword = $data['password'];
-                    $oldPassword = $plainPassword;
-                    $hashedPassword = $this->passwordGenerator($plainPassword);
-                    $configData['password'] = $hashedPassword;
+                    $configData['password'] = $this->generatePassword($plainPassword);;
                     $this->write($configData);
                 }
 
@@ -136,8 +129,8 @@ class ProtectController implements ControllerProviderInterface
 
         $context = [
             'form' => $form->createView(),
-            'password' => $plainPassword,
-            'oldPassword' => $oldPassword
+            'password' => $configData['password'],
+            'oldPassword' => $data['password']
         ];
 
         // Render the form, and show it it the visitor.
@@ -152,22 +145,9 @@ class ProtectController implements ControllerProviderInterface
      * @param $password
      * @return string
      */
-    protected function passwordGenerator($password)
+    protected function generatePassword($password)
     {
-        switch($this->config['encryption']) {
-            case 'plaintext':
-                $password = $password;
-                break;
-            case 'md5':
-                $password = md5($password);
-                break;
-            case 'password_hash':
-                $hasher   = new PasswordLib();
-                $password = $hasher->createPasswordHash($password, '$2y$');
-                break;
-        }
-
-        return $password;
+        return password_hash($password, PASSWORD_BCRYPT);
     }
 
     /**

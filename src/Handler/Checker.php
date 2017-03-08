@@ -97,7 +97,6 @@ class Checker
      */
     public function checkLogin($data)
     {
-
         if (empty($data['password'])) {
             return false;
         }
@@ -111,11 +110,9 @@ class Checker
         }
 
         foreach ($visitors as $visitor => $password) {
-            if ($data['username'] === $visitor) {
-                // echo "user match!";
-                if (password_verify($data['password'], $password)) {
-                    return $visitor;
-                }
+            if (($data['username'] === $visitor) &&
+                (password_verify($data['password'], $password))) {
+                return $visitor;
             }
         }
 

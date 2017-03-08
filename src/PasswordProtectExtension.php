@@ -14,22 +14,17 @@ class PasswordProtectExtension extends SimpleExtension
 {
     public function registerServices(Application $app)
     {
-        $app['passwordprotect.handler.checker'] = $app->share(
-            function ($app) {
-                $config = $app['extensions']->get('Bolt/PasswordProtect')->getConfig();
+        $config = $this->getConfig();
 
+        $app['passwordprotect.handler.checker'] = $app->share(
+            function ($app) use ($config) {
                 return new Checker($app, $config);
             }
         );
 
         $app['passwordprotect.twig'] = $app->share(
-            function ($app) {
-                $config = $app['extensions']->get('Bolt/PasswordProtect')->getConfig();
-
-                return new Twig\PasswordProtectExtension(
-                    $app,
-                    $config
-                );
+            function ($app) use ($config) {
+                return new Twig\PasswordProtectExtension($app, $config);
             }
         );
 
@@ -45,8 +40,6 @@ class PasswordProtectExtension extends SimpleExtension
                 return $policy;
             })
         );
-
-        $config = $this->getConfig();
 
         if (isset($config['contenttype'])) {
             $app->before(function (Request $request) use ($app) {
@@ -79,29 +72,34 @@ class PasswordProtectExtension extends SimpleExtension
     protected function getDefaultConfig()
     {
         return [
-            'encryption' => 'password_hash',
-            'permission' => 'files:config'
+            'encryption'                        => 'password_hash',
+            'permission'                        => 'files:config',
+            'allow_setting_password_in_backend' => false
         ];
     }
 
     protected function registerMenuEntries()
     {
         $config = $this->getConfig();
+        $app = $this->getContainer();
 
-        $changePassword = (new MenuEntry('passwordProtect', '/bolt/protect/changePassword'))
-            ->setLabel('PasswordProtect - Set Password')
-            ->setIcon('fa:lock')
-            ->setPermission($config['permission']);
+        $prefix = $app['url_generator']->generate('dashboard');
 
-        $findPasswordHash = (new MenuEntry('generatePasswordHash', '/bolt/protect/generatepasswords'))
+        $menuEntries = [];
+
+        if ($this->config['allow_setting_password_in_backend']) {
+            $menuEntries[] = (new MenuEntry('passwordProtect', $prefix . '/protect/changePassword'))
+                ->setLabel('PasswordProtect - Set Password')
+                ->setIcon('fa:lock')
+                ->setPermission($config['permission']);
+        }
+
+        $menuEntries[] = (new MenuEntry('generatePasswordHash', $prefix . '/protect/generatepasswords'))
             ->setLabel('Generate Password')
             ->setIcon('fa:lock')
             ->setPermission($config['permission']);
 
-        return [
-            $changePassword,
-            $findPasswordHash
-        ];
+        return $menuEntries;
     }
 
     protected function registerBackendControllers()

@@ -58,11 +58,12 @@ class PasswordProtectExtension
      */
     public function passwordForm()
     {
+        $notices = [];
         // If the config still specifies either 'plain text' or 'md5', tell the user to update,
         // since only password_hash is supported now.
         if ($this->config['encryption'] !== 'password_hash') {
-            $message = '<strong>Passwordprotect notice: This extension only supports hashing with the \'password_hash\' mechanism. Please update your configuration file.</strong>';
-            return new \Twig_Markup($message, 'UTF-8');
+            $message = 'This extension only supports hashing with the <tt>password_hash</tt> mechanism. Please update your configuration file.';
+            $notices[] = sprintf("<p class='message-wrong'>%s</p>", $message);
         }
 
         // Set up the form.
@@ -88,7 +89,7 @@ class PasswordProtectExtension
                 $this->app['session']->set('passwordprotect_name', $this->app['passwordprotect.handler.checker']->checkLogin($data));
 
                 // Print a friendly message..
-                printf("<p class='message-correct'>%s</p>", $this->config['message_correct']);
+                $notices[] = sprintf("<p class='message-correct'>%s</p>", $this->config['message_correct']);
 
                 $returnto = $request->get('returnto');
 
@@ -105,7 +106,7 @@ class PasswordProtectExtension
 
                 // Print a friendly message..
                 if (!empty($data['password'])) {
-                    printf("<p class='message-wrong'>%s</p>", $this->config['message_wrong']);
+                    $notices[] = sprintf("<p class='message-wrong'>%s</p>", $this->config['message_wrong']);
                 }
 
             }
@@ -118,8 +119,12 @@ class PasswordProtectExtension
         }
 
         // Render the form, and show it it the visitor.
-        //$this->twigFilesystem->addPath(__DIR__);
-        $html = $this->app['twig']->render($formView, ['form' => $form->createView()]);
+        $twigData = [
+            'form' => $form->createView(),
+            'notice' => new \Twig_Markup(implode('\n', $notices), 'UTF-8')
+        ];
+
+        $html = $this->app['twig']->render($formView, $twigData);
 
         return new Twig_Markup($html, 'UTF-8');
     }
