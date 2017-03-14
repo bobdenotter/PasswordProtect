@@ -1,5 +1,5 @@
 {
-    "name": "bolt/passwordprotect",
+    "name": "bobdenotter/passwordprotect",
     "description": "A small extension to password protect pages on your site, when using {{ passwordprotect() }} in your templates.",
     "type": "bolt-extension",
     "keywords": [
@@ -20,10 +20,10 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Bolt\\Extension\\Bolt\\PasswordProtect\\": "src/"
+            "Bolt\\Extension\\Bobdenotter\\PasswordProtect\\": "src/"
         }
     },
     "extra": {
-        "bolt-class": "Bolt\\Extension\\Bolt\\PasswordProtect\\PasswordProtectExtension"
+        "bolt-class": "Bolt\\Extension\\Bobdenotter\\PasswordProtect\\PasswordProtectExtension"
     }
 }
