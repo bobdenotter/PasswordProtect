@@ -1,6 +1,6 @@
 <?php
 
-namespace Bolt\Extension\Bolt\PasswordProtect\Controller;
+namespace Bolt\Extension\Bobdenotter\PasswordProtect\Controller;
 
 use PasswordLib\PasswordLib;
 use Silex\Application;

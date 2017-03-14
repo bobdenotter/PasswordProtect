@@ -1,8 +1,8 @@
 <?php
 
-namespace Bolt\Extension\Bolt\PasswordProtect\Twig;
+namespace Bolt\Extension\Bobdenotter\PasswordProtect\Twig;
 
-use Bolt\Extension\Bolt\PasswordProtect\Handler\Checker;
+use Bolt\Extension\Bobdenotter\PasswordProtect\Handler\Checker;
 use Silex\Application;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;

@@ -1,10 +1,10 @@
 <?php
 // PasswordProtect Extension for Bolt
 
-namespace Bolt\Extension\Bolt\PasswordProtect;
+namespace Bolt\Extension\Bobdenotter\PasswordProtect;
 
-use Bolt\Extension\Bolt\PasswordProtect\Controller\ProtectController;
-use Bolt\Extension\Bolt\PasswordProtect\Handler\Checker;
+use Bolt\Extension\Bobdenotter\PasswordProtect\Controller\ProtectController;
+use Bolt\Extension\Bobdenotter\PasswordProtect\Handler\Checker;
 use Bolt\Extension\SimpleExtension;
 use Bolt\Menu\MenuEntry;
 use Silex\Application;

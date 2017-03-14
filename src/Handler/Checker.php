@@ -1,6 +1,6 @@
 <?php
 
-namespace Bolt\Extension\Bolt\PasswordProtect\Handler;
+namespace Bolt\Extension\Bobdenotter\PasswordProtect\Handler;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
