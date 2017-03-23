@@ -16,8 +16,10 @@ redirect: 'page/login'
 message_correct: "Thank you for providing the correct password. You now have access to the protected pages."
 message_wrong: "The password was not correct. Try again."
 
-# Don't change this, unless you like living on the edge.
+# Template to use for the password form. Best practice is to copy the form to your
+# own theme folder, and modify it there.
 form: passwordform.twig
 
-# Content type to restrict users on. Note: use the SINGULAR form, here!
-contenttype: [members-only-post, event]
+# You can use this option to restrict access to an entire Contenttype
+# Note: use the PLURAL form of the slug, here!
+# contenttype: [ entries ]
