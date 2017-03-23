@@ -133,4 +133,9 @@ class PasswordProtect
     {
         $this->app['passwordprotect.handler.checker']->passwordProtect();
     }
+
+    public function passwordProtectUsername()
+    {
+        return $this->app['session']->get('passwordprotect_name', null);
+    }
 }

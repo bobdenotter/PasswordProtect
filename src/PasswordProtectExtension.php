@@ -32,8 +32,6 @@ class PasswordProtectExtension extends SimpleExtension
             $app->extend('twig.sandbox.policy', function ($policy) {
                 $policy->addAllowedFunction('form_widget');
                 $policy->addAllowedMethod('formview', 'isrendered');
-                $policy->addAllowedMethod('session', 'get');
-                $policy->addAllowedProperty('app', 'session');
                 $policy->addAllowedProperty('formview', 'parent');
                 $policy->addAllowedProperty('formview', 'vars');
 
@@ -65,6 +63,10 @@ class PasswordProtectExtension extends SimpleExtension
             'passwordform' => [
                 [$app['passwordprotect.twig'], 'passwordForm'],
                 ['is_safe' => ['html'], 'safe' => true]
+            ],
+            'passwordprotect_username' => [
+                [$app['passwordprotect.twig'],'passwordProtectUsername'],
+                ['is_safe' => ['html'], 'safe' => true]
             ]
         ];
     }
@@ -87,7 +89,7 @@ class PasswordProtectExtension extends SimpleExtension
 
         $menuEntries = [];
 
-        if ($this->config['allow_setting_password_in_backend']) {
+        if ($config['allow_setting_password_in_backend']) {
             $menuEntries[] = (new MenuEntry('passwordProtect', $prefix . '/protect/changePassword'))
                 ->setLabel('PasswordProtect - Set Password')
                 ->setIcon('fa:lock')

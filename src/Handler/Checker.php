@@ -73,9 +73,19 @@ class Checker
         } else {
             $redirectto = $this->app['storage']->getContent($this->config['redirect'], ['returnsingle' => true]);
             $returnto = $this->app['request_stack']->getCurrentRequest()->getRequestUri();
-            $response = new RedirectResponse($redirectto->link(). "?returnto=" . urlencode($returnto));
-            $response->send();
-            die();
+
+            // Redirect to new page.
+            if ($redirectto && (parse_url($redirectto->link(), PHP_URL_PATH) != parse_url($returnto, PHP_URL_PATH))) {
+                $response = new RedirectResponse($redirectto->link(). "?returnto=" . urlencode($returnto));
+                $response->send();
+                die();
+            }
+
+            // If we _should_ redirect, but the page doesn't exist, spit out a message.
+            if (!$redirectto) {
+                echo "<p>Can not redirect to <tt>" . $this->config['redirect'] ."</tt>. Make sure the record exists, and is published.<p>";
+                die();
+            }
         }
     }
 
