@@ -49,12 +49,15 @@ class Checker
         //get the path, typically /members-only/home
         $path = $request->get('contenttypeslug');
 
-        //Grab key 1 that has members-only
-        if ($path !== null) {
-            $contenttype = (array) $this->config['contenttype'];
+        if ($path == null) {
+            return;
+        }
 
+        $restrictContenttype = (array) $this->config['contenttype'];
+
+        foreach($this->app['config']->get('contenttypes') as $key => $ct) {
             //Check if members-only is the same contenttype in our config file
-            if (in_array($path, $contenttype)) {
+            if ((in_array($ct['slug'], $restrictContenttype)) || (in_array($ct['singular_slug'], $restrictContenttype))) {
                 $this->checkSessionAndRedirect();
             }
         }

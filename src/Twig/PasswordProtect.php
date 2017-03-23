@@ -96,7 +96,7 @@ class PasswordProtect
                 // And back we go, to the page we originally came from..
                 if (!empty($returnto)) {
                     $redirect = new RedirectResponse($returnto);
-                    $redirect->send();
+                    echo($redirect->getContent());
                 }
 
             } else {
