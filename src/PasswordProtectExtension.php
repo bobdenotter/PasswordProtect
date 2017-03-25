@@ -28,16 +28,19 @@ class PasswordProtectExtension extends SimpleExtension
             }
         );
 
-        $app['twig.sandbox.policy'] = $app->share(
-            $app->extend('twig.sandbox.policy', function ($policy) {
-                $policy->addAllowedFunction('form_widget');
-                $policy->addAllowedMethod('formview', 'isrendered');
-                $policy->addAllowedProperty('formview', 'parent');
-                $policy->addAllowedProperty('formview', 'vars');
+        // Set the sandbox policy, but only for Bolt 3.3 and up.
+        if (isset($app['twig.sandbox.policy'])) {
+            $app['twig.sandbox.policy'] = $app->share(
+                $app->extend('twig.sandbox.policy', function ($policy) {
+                    $policy->addAllowedFunction('form_widget');
+                    $policy->addAllowedMethod('formview', 'isrendered');
+                    $policy->addAllowedProperty('formview', 'parent');
+                    $policy->addAllowedProperty('formview', 'vars');
 
-                return $policy;
-            })
-        );
+                    return $policy;
+                })
+            );
+        }
 
         if (isset($config['contenttype'])) {
             $app->before(function (Request $request) use ($app) {

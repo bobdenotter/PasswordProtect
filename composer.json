@@ -7,7 +7,7 @@
         "protect"
     ],
     "require": {
-        "bolt/bolt": "^3.3"
+        "bolt/bolt": "^3.2"
     },
     "license": "MIT",
     "authors": [
