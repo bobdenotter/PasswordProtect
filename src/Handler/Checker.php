@@ -58,7 +58,7 @@ class Checker
         foreach($this->app['config']->get('contenttypes') as $key => $ct) {
             //check if the slug(singular or multiple) of this contenttype matches
             //the one of our request. If not we should skip this round
-            if(!(($ct['slug'] == $path) || ($ct['singular_slug'] == $path))){
+            if ($ct['slug'] != $path && $ct['singular_slug'] != $path){
                 continue;
             }
 
