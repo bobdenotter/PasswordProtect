@@ -56,6 +56,12 @@ class Checker
         $restrictContenttype = (array) $this->config['contenttype'];
 
         foreach($this->app['config']->get('contenttypes') as $key => $ct) {
+            //check if the slug(singular or multiple) of this contenttype matches
+            //the one of our request. If not we should skip this round
+            if ($ct['slug'] != $path && $ct['singular_slug'] != $path){
+                continue;
+            }
+
             //Check if members-only is the same contenttype in our config file
             if ((in_array($ct['slug'], $restrictContenttype)) || (in_array($ct['singular_slug'], $restrictContenttype))) {
                 $this->checkSessionAndRedirect();
