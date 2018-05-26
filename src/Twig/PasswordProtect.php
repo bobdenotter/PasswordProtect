@@ -67,8 +67,8 @@ class PasswordProtect
         }
 
         //prepare custom labels
-        function getConfigOrDefault($array, $key, $default){
-          return array_key_exists($key, $array) ? $array[$key] : $default;
+        function getConfigOrDefault($config, $key, $default){
+          return array_key_exists($key, $config) ? $config[$key] : $default;
         }
         $labels = [];
         $labels['username'] = getConfigOrDefault($this->config,'label_username',"username");
