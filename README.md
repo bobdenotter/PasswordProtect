@@ -76,7 +76,9 @@ Modifying the public Form page
 -----------------------------------
 
 You can change the form being asked for in the `config.yml` by changing the
-`form` parameter. An example of the form is under `templates/passwordform.twig`.
+`form` parameter. An example of the form is under `templates/passwordform.twig`.  
+If you want to use the provided form-template, but with custom labels, you
+can set or modify them in `config.yml`.
 
 Changing passwords without modifying the YML file
 -------------------------------------------------
