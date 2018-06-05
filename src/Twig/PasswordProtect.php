@@ -2,6 +2,7 @@
 
 namespace Bolt\Extension\Bobdenotter\PasswordProtect\Twig;
 
+use Bolt\Collection\Bag;
 use Bolt\Extension\Bobdenotter\PasswordProtect\Handler\Checker;
 use Silex\Application;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -42,9 +43,9 @@ class PasswordProtect
      * PasswordProtectExtension constructor.
      *
      * @param Application $app
-     * @param array $config
+     * @param Bag         $config
      */
-    public function __construct(Application $app, array $config)
+    public function __construct(Application $app, Bag $config)
     {
         $this->config = $config;
         $this->app = $app;
@@ -66,16 +67,8 @@ class PasswordProtect
             $notices[] = sprintf("<p class='message-wrong'>%s</p>", $message);
         }
 
-        //prepare custom labels
-        function getConfigOrDefault($config, $key, $default){
-          return array_key_exists($key, $config) ? $config[$key] : $default;
-        }
-        $labels = [];
-        $labels['username'] = getConfigOrDefault($this->config,'label_username',"username");
-        $labels['password'] = getConfigOrDefault($this->config,'label_password',"password");
-        $labels['login'] = getConfigOrDefault($this->config,'label_login',"Log on!");
-        $labels['logout'] = getConfigOrDefault($this->config,'label_logout',"Log off!");
-        $labels['alreadyloggedin'] = getConfigOrDefault($this->config,'message_alreadyloggedin',"You are already logged on. Click the button below to log off.");
+        // Fetch the labels
+        $labels = $this->config->get('labels');
 
         // Set up the form.
         $form = $this->app['form.factory']->createBuilder('form');

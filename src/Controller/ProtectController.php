@@ -2,6 +2,7 @@
 
 namespace Bolt\Extension\Bobdenotter\PasswordProtect\Controller;
 
+use Bolt\Collection\Bag;
 use PasswordLib\PasswordLib;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
@@ -24,9 +25,9 @@ class ProtectController implements ControllerProviderInterface
      * ProtectController constructor.
      *
      * @param Application $app
-     * @param array $config
+     * @param Bag         $config
      */
-    public function __construct(Application $app, array $config)
+    public function __construct(Application $app, Bag $config)
     {
         $this->app = $app;
         $this->config = $config;
