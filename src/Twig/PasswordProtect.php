@@ -66,14 +66,25 @@ class PasswordProtect
             $notices[] = sprintf("<p class='message-wrong'>%s</p>", $message);
         }
 
+        //prepare custom labels
+        function getConfigOrDefault($config, $key, $default){
+          return array_key_exists($key, $config) ? $config[$key] : $default;
+        }
+        $labels = [];
+        $labels['username'] = getConfigOrDefault($this->config,'label_username',"username");
+        $labels['password'] = getConfigOrDefault($this->config,'label_password',"password");
+        $labels['login'] = getConfigOrDefault($this->config,'label_login',"Log on!");
+        $labels['logout'] = getConfigOrDefault($this->config,'label_logout',"Log off!");
+        $labels['alreadyloggedin'] = getConfigOrDefault($this->config,'message_alreadyloggedin',"You are already logged on. Click the button below to log off.");
+
         // Set up the form.
         $form = $this->app['form.factory']->createBuilder('form');
 
         if ($this->config['password_only'] == false) {
-            $form->add('username', 'text');
+            $form->add('username', 'text', ['label'=>$labels['username']]);
         }
 
-        $form->add('password', 'password');
+        $form->add('password', 'password', ['label'=>$labels['password']]);
         $form = $form->getForm();
 
         $request = $this->app['request_stack']->getCurrentRequest();
@@ -121,7 +132,8 @@ class PasswordProtect
         // Render the form, and show it it the visitor.
         $twigData = [
             'form' => $form->createView(),
-            'notice' => new \Twig_Markup(implode('\n', $notices), 'UTF-8')
+            'notice' => new \Twig_Markup(implode('\n', $notices), 'UTF-8'),
+            'labels' => $labels
         ];
 
         $html = $this->app['twig']->render($formView, $twigData);
