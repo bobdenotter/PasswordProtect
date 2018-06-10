@@ -60,11 +60,12 @@ class PasswordProtect
     public function passwordForm()
     {
         $notices = [];
+
         // If the config still specifies either 'plain text' or 'md5', tell the user to update,
         // since only password_hash is supported now.
         if ($this->config['encryption'] !== 'password_hash') {
             $message = 'This extension only supports hashing with the <tt>password_hash</tt> mechanism. Please update your configuration file.';
-            $notices[] = sprintf("<p class='message-wrong'>%s</p>", $message);
+            $notices[] = sprintf("<p class='message message-wrong'>%s</p>", $message);
         }
 
         // Fetch the labels
@@ -82,7 +83,15 @@ class PasswordProtect
 
         $request = $this->app['request_stack']->getCurrentRequest();
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() != 'POST') {
+            if ($this->passwordProtectUsername()) {
+                // Print a "Already logged in" message..
+                $notices[] = sprintf("<p class='message'>%s</p>", $this->config['labels']['message_alreadyloggedin']);
+            } else {
+                // Print a "Please log on" message..
+                $notices[] = sprintf("<p class='message'>%s</p>", $this->config['labels']['message_default']);
+            }
+        } else {
             $form->handleRequest($request);
 
             $data = $form->getData();
@@ -93,7 +102,7 @@ class PasswordProtect
                 $this->app['session']->set('passwordprotect_name', $this->app['passwordprotect.handler.checker']->checkLogin($data));
 
                 // Print a friendly message..
-                $notices[] = sprintf("<p class='message-correct'>%s</p>", $this->config['message_correct']);
+                $notices[] = sprintf("<p class='message message-correct'>%s</p>", $this->config['labels']['message_correct']);
 
                 $returnto = $request->get('returnto');
 
@@ -110,7 +119,7 @@ class PasswordProtect
 
                 // Print a friendly message..
                 if (!empty($data['password'])) {
-                    $notices[] = sprintf("<p class='message-wrong'>%s</p>", $this->config['message_wrong']);
+                    $notices[] = sprintf("<p class='message message-wrong'>%s</p>", $this->config['labels']['message_wrong']);
                 }
 
             }
@@ -125,7 +134,7 @@ class PasswordProtect
         // Render the form, and show it it the visitor.
         $twigData = [
             'form' => $form->createView(),
-            'notice' => new \Twig_Markup(implode('\n', $notices), 'UTF-8'),
+            'notice' => new \Twig_Markup(implode('', $notices), 'UTF-8'),
             'labels' => $labels
         ];
 

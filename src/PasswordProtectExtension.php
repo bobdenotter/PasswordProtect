@@ -86,9 +86,10 @@ class PasswordProtectExtension extends SimpleExtension
             'labels' => [
                 'username' => "Username",
                 'password' => "Password",
-                'login' => "Log on!",
-                'logout' => "Log off!",
-                'alreadyloggedin' => "You are already logged on.",
+                'login' => "Log on",
+                'logout' => "Log off",
+                'message_alreadyloggedin' => "You are already logged on. Click the button below to log off.",
+                'message_default' => "Please provide your username and password to gain access.",
                 'message_correct' => "Thank you for providing the correct password. You now have access to the protected pages.",
                 'message_wrong' => "The password was not correct. Try again."
             ]
