@@ -2,6 +2,7 @@
 
 namespace Bolt\Extension\Bobdenotter\PasswordProtect\Twig;
 
+use Bolt\Collection\Bag;
 use Bolt\Extension\Bobdenotter\PasswordProtect\Handler\Checker;
 use Silex\Application;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -42,9 +43,9 @@ class PasswordProtect
      * PasswordProtectExtension constructor.
      *
      * @param Application $app
-     * @param array $config
+     * @param Bag         $config
      */
-    public function __construct(Application $app, array $config)
+    public function __construct(Application $app, Bag $config)
     {
         $this->config = $config;
         $this->app = $app;
@@ -59,26 +60,38 @@ class PasswordProtect
     public function passwordForm()
     {
         $notices = [];
+
         // If the config still specifies either 'plain text' or 'md5', tell the user to update,
         // since only password_hash is supported now.
         if ($this->config['encryption'] !== 'password_hash') {
             $message = 'This extension only supports hashing with the <tt>password_hash</tt> mechanism. Please update your configuration file.';
-            $notices[] = sprintf("<p class='message-wrong'>%s</p>", $message);
+            $notices[] = sprintf("<p class='message message-wrong'>%s</p>", $message);
         }
+
+        // Fetch the labels
+        $labels = $this->config->get('labels');
 
         // Set up the form.
         $form = $this->app['form.factory']->createBuilder('form');
 
         if ($this->config['password_only'] == false) {
-            $form->add('username', 'text');
+            $form->add('username', 'text', ['label'=>$labels['username']]);
         }
 
-        $form->add('password', 'password');
+        $form->add('password', 'password', ['label'=>$labels['password']]);
         $form = $form->getForm();
 
         $request = $this->app['request_stack']->getCurrentRequest();
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() != 'POST') {
+            if ($this->passwordProtectUsername()) {
+                // Print a "Already logged in" message..
+                $notices[] = sprintf("<p class='message'>%s</p>", $this->config['labels']['message_alreadyloggedin']);
+            } else {
+                // Print a "Please log on" message..
+                $notices[] = sprintf("<p class='message'>%s</p>", $this->config['labels']['message_default']);
+            }
+        } else {
             $form->handleRequest($request);
 
             $data = $form->getData();
@@ -89,7 +102,7 @@ class PasswordProtect
                 $this->app['session']->set('passwordprotect_name', $this->app['passwordprotect.handler.checker']->checkLogin($data));
 
                 // Print a friendly message..
-                $notices[] = sprintf("<p class='message-correct'>%s</p>", $this->config['message_correct']);
+                $notices[] = sprintf("<p class='message message-correct'>%s</p>", $this->config['labels']['message_correct']);
 
                 $returnto = $request->get('returnto');
 
@@ -106,7 +119,7 @@ class PasswordProtect
 
                 // Print a friendly message..
                 if (!empty($data['password'])) {
-                    $notices[] = sprintf("<p class='message-wrong'>%s</p>", $this->config['message_wrong']);
+                    $notices[] = sprintf("<p class='message message-wrong'>%s</p>", $this->config['labels']['message_wrong']);
                 }
 
             }
@@ -121,7 +134,8 @@ class PasswordProtect
         // Render the form, and show it it the visitor.
         $twigData = [
             'form' => $form->createView(),
-            'notice' => new \Twig_Markup(implode('\n', $notices), 'UTF-8')
+            'notice' => new \Twig_Markup(implode('', $notices), 'UTF-8'),
+            'labels' => $labels
         ];
 
         $html = $this->app['twig']->render($formView, $twigData);

@@ -3,6 +3,7 @@
 
 namespace Bolt\Extension\Bobdenotter\PasswordProtect;
 
+use Bolt\Collection\Bag;
 use Bolt\Extension\Bobdenotter\PasswordProtect\Controller\ProtectController;
 use Bolt\Extension\Bobdenotter\PasswordProtect\Handler\Checker;
 use Bolt\Extension\SimpleExtension;
@@ -34,6 +35,8 @@ class PasswordProtectExtension extends SimpleExtension
                 $app->extend('twig.sandbox.policy', function ($policy) {
                     $policy->addAllowedFunction('form_widget');
                     $policy->addAllowedMethod('formview', 'isrendered');
+                    $policy->addAllowedMethod('formview', 'ismethodrendered');
+                    $policy->addAllowedMethod('formview', 'setmethodrendered');
                     $policy->addAllowedProperty('formview', 'parent');
                     $policy->addAllowedProperty('formview', 'vars');
 
@@ -42,7 +45,7 @@ class PasswordProtectExtension extends SimpleExtension
             );
         }
 
-        if (isset($config['contenttype'])) {
+        if ($config->get('contenttype')) {
             $app->before(function (Request $request) use ($app) {
                 return $app['passwordprotect.handler.checker']->checkContentTypeOnRequest($request);
             }, Application::LATE_EVENT);
@@ -79,8 +82,23 @@ class PasswordProtectExtension extends SimpleExtension
         return [
             'encryption'                        => 'password_hash',
             'permission'                        => 'files:config',
-            'allow_setting_password_in_backend' => false
+            'allow_setting_password_in_backend' => false,
+            'labels' => [
+                'username' => "Username",
+                'password' => "Password",
+                'login' => "Log on",
+                'logout' => "Log off",
+                'message_alreadyloggedin' => "You are already logged on. Click the button below to log off.",
+                'message_default' => "Please provide your username and password to gain access.",
+                'message_correct' => "Thank you for providing the correct password. You now have access to the protected pages.",
+                'message_wrong' => "The password was not correct. Try again."
+            ]
         ];
+    }
+
+    protected function getConfig()
+    {
+        return $this->config = new Bag(parent::getConfig());
     }
 
     protected function registerMenuEntries()
@@ -92,17 +110,17 @@ class PasswordProtectExtension extends SimpleExtension
 
         $menuEntries = [];
 
-        if ($config['allow_setting_password_in_backend']) {
+        if ($config->get('allow_setting_password_in_backend')) {
             $menuEntries[] = (new MenuEntry('passwordProtect', $prefix . '/protect/changePassword'))
                 ->setLabel('PasswordProtect - Set Password')
                 ->setIcon('fa:lock')
-                ->setPermission($config['permission']);
+                ->setPermission($config->get('permission'));
         }
 
         $menuEntries[] = (new MenuEntry('generatePasswordHash', $prefix . '/protect/generatepasswords'))
             ->setLabel('Generate Password')
             ->setIcon('fa:lock')
-            ->setPermission($config['permission']);
+            ->setPermission($config->get('permission'));
 
         return $menuEntries;
     }

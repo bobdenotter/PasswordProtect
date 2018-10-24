@@ -2,6 +2,7 @@
 
 namespace Bolt\Extension\Bobdenotter\PasswordProtect\Handler;
 
+use Bolt\Collection\Bag;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -31,9 +32,9 @@ class Checker
      * Checker constructor.
      *
      * @param Application $app
-     * @param array $config
+     * @param Bag         $config
      */
-    public function __construct(Application $app, array $config)
+    public function __construct(Application $app, Bag $config)
     {
         $this->app = $app;
         $this->config = $config;
@@ -46,6 +47,11 @@ class Checker
      */
     public function checkContentTypeOnRequest(Request $request)
     {
+        // Only apply this on 'contentlisting' and 'contentlink'
+        if (!in_array($request->get('_route'), ['contentlisting', 'contentlink'])) {
+            return;
+        }
+        
         //get the path, typically /members-only/home
         $path = $request->get('contenttypeslug');
 
